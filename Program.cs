@@ -32,8 +32,12 @@ builder.Services.AddScoped<DataService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IBlogEmailSender, EmailService>();
 
-//Register our Image Service
+//Register Image Service
 builder.Services.AddScoped<IImageService, BasicImageService>();
+
+//Register Slug Service
+builder.Services.AddScoped<ISlugService, BasicSlugService>();
+
 
 var app = builder.Build();
 
