@@ -27,9 +27,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<DataService>();
+
 //Register a pre-configured instance of the MailSettings class
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IBlogEmailSender, EmailService>();
+
+//Register our Image Service
+builder.Services.AddScoped<IImageService, BasicImageService>();
 
 var app = builder.Build();
 
