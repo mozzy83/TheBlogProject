@@ -35,17 +35,48 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReadyStatus" class="control-label"></label>
-                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
-                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <input type="file" asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
-            <div class="form-group mt-3 mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col pb-2 pt-4">
+                        <label class="control-label">Manage Tags</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" id="TagEntry" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="row pt-3">
+                                <div class="col d-grid px-3">
+                                    <button onclick="AddTag()" name="Add" type="button" class="btn btn-dark btn-sm rounded-pill">Add</button>
+                                </div>
+                                <div class="col d-grid px-3">
+                                    <button onclick="DeleteTag()" name="Delete" type="button" class="btn btn-dark btn-sm rounded-pill">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <select class="form-select" name="TagValues" id="TagList" multiple></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group pt-3">
+                <label asp-for="ReadyStatus" class="control-label"></label>
+                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
+                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-3 d-grid">
+                <button type="submit" class="btn btn-dark btn-sm rounded-pill">Create</button>
             </div>
         </form>
     </div>
@@ -56,7 +87,7 @@
 </div>
 
 @section Scripts {
-    
+    <script src="~/js/custom.js"></script>
     <script>
         //Default font size but not for placeholder...
         $('#Content').summernote({
