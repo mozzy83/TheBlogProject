@@ -116,11 +116,19 @@ namespace TheBlogProject.Controllers
                 }
                 
                 //Detect incoming duplicate slugs
-                if (!_slugService.IsUnique(slug))
+                else if (!_slugService.IsUnique(slug))
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
                 }
+
+                //example of custom validation for anything:
+                //else if (slug.Contains("test"))
+                //{
+                //    validationError = true;
+                //    ModelState.AddModelError("", "Uh-oh are you testing again??");
+                //    ModelState.AddModelError("Title", "The title cannot contain the word test");
+                //}
 
                 if (validationError)
                 {
@@ -156,14 +164,15 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string slug)
         {
-            if (id == null || _context.Posts == null)
+            //if (id == null || _context.Posts == null)
+            if(slug == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -257,9 +266,9 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string slug)
         {
-            if (id == null || _context.Posts == null)
+            if (slug == null)
             {
                 return NotFound();
             }
@@ -267,7 +276,7 @@ namespace TheBlogProject.Controllers
             var post = await _context.Posts
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
