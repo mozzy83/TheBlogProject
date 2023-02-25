@@ -30,6 +30,8 @@
     <PackageReference Include="MimeKit" Version="3.5.0" />
     <PackageReference Include="Npgsql" Version="7.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.0.7" />
+    <PackageReference Include="X.PagedList.Web.Common" Version="8.0.7" />
   </ItemGroup>
 
 </Project>

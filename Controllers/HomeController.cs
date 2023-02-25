@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -10,16 +14,36 @@ namespace TheBlogProject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IBlogEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender blogEmailSender)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender blogEmailSender, ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
             _logger = logger;
             _emailSender = blogEmailSender;
+            _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            return View();
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            //var blogs = _context.Blogs.Include(b => b.BlogUser).Where(
+            //    b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+            //    .OrderByDescending(b => b.Created)
+            //    .ToPagedListAsync(pageNumber, pageSize);
+
+            var blogs = _context.Blogs
+                .Include(b => b.BlogUser)
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
+
+
+            return View(await blogs);                
+                
+
         }
 
         public IActionResult About()
