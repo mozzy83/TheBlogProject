@@ -63,6 +63,8 @@ namespace TheBlogProject.Services
                 PhoneNumber = "(800) 555-1212",
                 EmailConfirmed = true
             };
+
+
             //Step 2: Use the UserManager to create a new user that is defined by adminUser
             await _userManager.CreateAsync(adminUser, "Abc&123!");
             //Step 3: Add new user to Administrator role
