@@ -36,5 +36,25 @@
     </article>
 <hr />
 
+<div class="d-grid pb-3">
+    @if(User.Identity.IsAuthenticated){
+        <form asp-action="Create" asp-controller="Comments" method="post">
+            @Html.Hidden("PostId", Model.Id)
+            <div class="form-group">
+                <label class="h2 custom-control-label font-weight-bold">Add Comment</label>
+                <textarea name="body" class="form-control" rows="10"></textarea>
+            </div>
+            <div class="d-grid col-6 mx-auto my-auto pt-3">
+            <button type="submit" class="btn btn-dark btn-sm rounded">Submit</button>
+            </div>
+        </form>
+    }
+    else{
+        <div class="d-grid col-6 mx-auto">
+        <a class="btn btn-sm btn-dark rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Posts/Details?slug=@Model.Slug">Login to Add comments</a>
+        </div>
+    }
+</div>
+
 <!-- Displaying Comments related to this post -->
 <!-- Display the image of the Comment's Author -->
