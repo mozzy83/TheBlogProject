@@ -38,6 +38,9 @@ builder.Services.AddScoped<IImageService, BasicImageService>();
 //Register Slug Service
 builder.Services.AddScoped<ISlugService, BasicSlugService>();
 
+//Register BlogSearchService
+builder.Services.AddScoped<BlogSearchService>();
+
 
 var app = builder.Build();
 
