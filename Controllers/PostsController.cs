@@ -29,6 +29,35 @@ namespace TheBlogProject.Controllers
             _userManager = userManager;
         }
 
+
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
+            if(searchTerm != null)
+            {
+                searchTerm = searchTerm.ToLower();
+
+                posts = posts.Where(
+                    p => p.Title.Contains(searchTerm) ||
+                    p.Abstract.Contains(searchTerm) ||
+                    p.Content.Contains(searchTerm) ||
+                    p.Comments.Any(c => c.Body.Contains(searchTerm) ||
+                                         c.ModeratedBody.Contains(searchTerm) ||
+                                         c.BlogUser.FirstName.Contains(searchTerm) ||
+                                         c.BlogUser.LastName.Contains(searchTerm) ||
+                                         c.BlogUser.Email.Contains(searchTerm)));
+            }
+
+            posts = posts.OrderByDescending(p => p.Created);
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+        }
+
+
         // GET: Posts
         public async Task<IActionResult> Index()
         {
@@ -39,7 +68,7 @@ namespace TheBlogProject.Controllers
         //BlogPostIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
-            if(id is null)
+            if (id is null)
             {
                 return NotFound();
             }
@@ -136,7 +165,7 @@ namespace TheBlogProject.Controllers
                     validationError = true;
                     ModelState.AddModelError("", "The Title you provided cannot be used as it results in an empty slug.");
                 }
-                
+
                 //Detect incoming duplicate slugs
                 else if (!_slugService.IsUnique(slug))
                 {
@@ -189,7 +218,7 @@ namespace TheBlogProject.Controllers
         public async Task<IActionResult> Edit(string slug)
         {
             //if (id == null || _context.Posts == null)
-            if(slug == null)
+            if (slug == null)
             {
                 return NotFound();
             }
@@ -223,7 +252,7 @@ namespace TheBlogProject.Controllers
                 {
                     //The original post
                     var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
-                    
+
                     newPost.Updated = DateTime.UtcNow;
                     newPost.Title = post.Title;
                     newPost.Abstract = post.Abstract;
@@ -231,7 +260,7 @@ namespace TheBlogProject.Controllers
                     newPost.ReadyStatus = post.ReadyStatus;
 
                     var newSlug = _slugService.UrlFriendly(post.Title);
-                    if(newSlug != newPost.Slug)
+                    if (newSlug != newPost.Slug)
                     {
                         if (_slugService.IsUnique(newSlug))
                         {
@@ -247,7 +276,7 @@ namespace TheBlogProject.Controllers
                     }
 
 
-                    if(newImage is not null)
+                    if (newImage is not null)
                     {
                         newPost.ImageData = await _imageService.EncodeImageAsync(newImage);
                         newPost.ContentType = _imageService.ContentType(newImage);
@@ -266,7 +295,7 @@ namespace TheBlogProject.Controllers
                             Text = tagText
                         });
                     }
-                    
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -321,14 +350,14 @@ namespace TheBlogProject.Controllers
             {
                 _context.Posts.Remove(post);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PostExists(int id)
         {
-          return _context.Posts.Any(e => e.Id == id);
+            return _context.Posts.Any(e => e.Id == id);
         }
     }
 }
