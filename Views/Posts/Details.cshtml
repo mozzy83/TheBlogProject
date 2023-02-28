@@ -1,6 +1,11 @@
 ﻿@using TheBlogProject.Services
+@using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json
+
 @model TheBlogProject.Models.Post
 
+
+@inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 
 @{
@@ -39,46 +44,92 @@
 </article>
 <hr />
 
-<div class="d-grid pb-3">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <form asp-action="Create" asp-controller="Comments" method="post">
-            @Html.Hidden("PostId", Model.Id)
-            <div class="form-group">
-                <label class="h2 custom-control-label font-weight-bold">Add Comment</label>
-                <textarea name="body" class="form-control" rows="10"></textarea>
+
+<div class="d-grid col-md-6 mx-auto my-auto pt-3">
+    <div class="d-grid pb-3">
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <form asp-action="Create" asp-controller="Comments" method="post">
+                @Html.Hidden("PostId", Model.Id)
+                <div class="form-group">
+                    <label class="h2 custom-control-label font-weight-bold">Add Comment</label>
+                    <textarea name="body" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="d-grid mx-auto my-auto pt-3">
+                    <button type="submit" class="btn btn-dark btn-sm rounded">Submit</button>
+                </div>
+            </form>
+
+        }
+        else
+        {
+            <div class="d-grid mx-auto">
+                <a class="btn btn-sm btn-dark rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Posts/Details?slug=@Model.Slug">Login to Add comments</a>
             </div>
-            <div class="d-grid col-6 mx-auto my-auto pt-3">
-                <button type="submit" class="btn btn-dark btn-sm rounded">Submit</button>
-            </div>
-        </form>
-    }
-    else
-    {
-        <div class="d-grid col-6 mx-auto">
-            <a class="btn btn-sm btn-dark rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Posts/Details?slug=@Model.Slug">Login to Add comments</a>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <!-- Displaying Comments related to this post -->
 
 <hr />
-<div class="d-grid col-6 mx-auto my-auto pt-3">
+<div class="d-grid col-md-6 mx-auto my-auto pt-3">
+
     <span class="btn btn-sm btn-dark">@Model.Comments.Count COMMENT(S)</span>
-</div>
-@foreach (var comment in Model.Comments)
-{
-    <div class="d-flex justify-content-center">
-    <div  cite="media media-border p-0 mb-2 bg-light">
-        <img class="mr-3 mt-3 rounded-circle" style="width:60px;" src="@imageService.DecodeImageAsync(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" />
-        <div class="media-body">
-            <h4>@comment.BlogUser.FullName</h4>
-            <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small>
-            <p>@comment.Body</p>
+
+    @foreach (var comment in Model.Comments)
+    {
+
+        <div class="media border-danger p-3 m-2 bg-light">
+            <img class="mr-3 mt-3 rounded-circle" style="width:60px;" src="@imageService.DecodeImageAsync(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" />
+            <div class="media-body">
+                <h4>@comment.BlogUser.FullName</h4>
+                <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small>
+                <p>@comment.Body</p>
+                @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+                {
+                    <hr />
+                    <div class="d-flex justify-content-end">
+                    <button data-bs-toggle="modal" data-bs-target="#editModal" class="btn-sm btn-dark font-weight-bold rounded">EDIT</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+ 
+
+
+        @*Modals*@
+    <div class="modal" id="editModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editing Comment...</h4>
+
+                </div>
+
+                    @*Modal body*@
+                <div class="modal-body">
+                    <form asp-action="Edit" asp-controller="Comments">
+                            @Html.Hidden("Id", comment.Id)
+
+                        <div class="form-group">
+                            <textarea name="Body" class="form-control" required>@comment.Body</textarea>
+                        </div>
+
+                        <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
+                    </form>
+                </div>
+
+                    @*Modal Footer*@
+                <div class="modal-footer">
+                    <button type="button" class="btn-sm btn-dark font-weight-bold" data-bs-dismiss="modal">CLOSE</button>
+                </div>
+
+            </div>
         </div>
     </div>
-    </div>
-}
 
-<!-- Display the image of the Comment's Author -->
+    }
+</div>
