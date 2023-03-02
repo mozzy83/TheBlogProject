@@ -98,14 +98,16 @@
                                 </span>
                                 : @comment.Moderated?.ToString("MMM dd, yyyy")
                             </span>
+                            <p>@comment.ModeratedBody</p>
                         }
                         else
                         {
                             <span class="small font-italic">Posted: @comment.Created.ToString("MMM dd, yyyy")</span>
+                            <p>@comment.Body</p>
                         }
                     </i>                    
                 </small>
-                @*<p>@comment.Body</p>*@
+                
 
 
                 @*SECTION 1: RENDER THE EDIT BUTTON*@
@@ -114,7 +116,7 @@
                 {
                     <hr />
                     <div class="d-flex justify-content-end">
-                    <button data-bs-toggle="modal" data-bs-target="#editModal" class="btn-sm btn-dark font-weight-bold rounded">EDIT</button>
+                    <button data-bs-toggle="modal" data-bs-target="#editModal-@comment.Id" class="btn-sm btn-dark font-weight-bold rounded">EDIT</button>
                     </div>
                 }
 
@@ -126,7 +128,7 @@
                     <hr />
                     <div class="row">
                         <div class="col-2">
-                            <button class="btn-sm btn-dark font-weight-bold btn-block" data-toggle="modal" data-bs-target="@($"#moderateModal{counter}")">MODERATE</button>
+                            <button class="btn-sm btn-dark font-weight-bold btn-block" data-bs-toggle="modal" data-bs-target="@($"#moderateModal{counter}")">MODERATE</button>
                         </div>
                         <div class="col-2">
                             <form asp-action="Delete" asp-controller="Comments">
@@ -191,7 +193,7 @@
         </div>
 
         @*Modals*@
-    <div class="modal" id="editModal">
+    <div class="modal" id="editModal-@comment.Id">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

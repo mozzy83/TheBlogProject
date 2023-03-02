@@ -25,7 +25,7 @@ namespace TheBlogProject.Models
         [Display(Name = "Moderated Comment")]
         public string? ModeratedBody { get; set; }
 
-        public ModerationType ModerationType { get; set; }
+        public ModerationType? ModerationType { get; set; }
 
         //Navigation properties
         public virtual Post? Post { get; set; }

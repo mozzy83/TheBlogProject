@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20230302030331_003.cs" />
+    <Compile Remove="Data\Migrations\20230302030331_003.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\css\StyleSheet.css" />
     <Content Remove="wwwroot\css\StyleSheet1.css" />
   </ItemGroup>

@@ -70,6 +70,7 @@ namespace TheBlogProject.Controllers
                 var commentList = await _context.Comments.Include(c => c.Post).FirstOrDefaultAsync(c => c.PostId == comment.PostId);
                 comment.BlogUserId = _userManager.GetUserId(User);
                 comment.Created = DateTime.UtcNow;
+                comment.ModerationType = null;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
