@@ -12,7 +12,7 @@
 @model IPagedList<Blog>
 
 
-<div class="row">
+<div class="row d-flex justify-content-center">
 
     @foreach (var blog in Model)
     {
@@ -37,7 +37,7 @@
 
                     <br />
                     <div class="text-center d-grid">
-                        <a class="btn btn-dark btn-sm mb-2 rounded" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                        <a class="btn btn-dark mb-2 rounded" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
                             Read Posts
                         </a>
                     </div>
@@ -45,14 +45,14 @@
                     @if (User.IsInRole(BlogRole.Administrator.ToString()))
                     {
                         <div class="text-center d-grid">
-                            <a class="btn-dark btn-sm mb-2 rounded" asp-action="Create" asp-controller="Posts" asp-route-id="@blog.Id">Create Post</a>
+                            <a class="btn-dark mb-2 rounded" asp-action="Create" asp-controller="Posts" asp-route-id="@blog.Id">Create Post</a>
                         </div>
                     }
 
                     @if (User.IsInRole(BlogRole.Administrator.ToString()))
                     {
                         <div class="text-center d-grid">
-                            <a class="btn btn-danger btn-sm rounded" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
+                            <a class="btn btn-danger rounded" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">Edit Blog</a>
                         </div>
 
                     }

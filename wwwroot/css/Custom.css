@@ -93,10 +93,11 @@ button.btn-sm, a.btn-sm {
     }
 
 /*CARD STYLES*/
-.card-hr {
+hr.card-hr {
     color: #212121;
     background-color: #212121;
-    height: 3px;
+    height: 3px;  
+    
 }
 
 .card-text {
