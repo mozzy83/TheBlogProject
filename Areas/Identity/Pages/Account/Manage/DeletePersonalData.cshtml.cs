@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using TheBlogProject.Data;
 using TheBlogProject.Models;
 
 namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
@@ -18,15 +20,18 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public DeletePersonalDataModel(
             UserManager<BlogUser> userManager,
             SignInManager<BlogUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -86,6 +91,37 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
+            var userBlogs = _context.Blogs
+                                    .Where(b => b.BlogUserId == user.Id)
+                                    .ToList();
+            var userComments = _context.Comments
+                                       .Where(c => c.BlogUserId == user.Id)
+                                       .ToList();
+            var userTags = _context.Tags
+                                   .Where(t => t.BlogUserId == user.Id)
+                                   .ToList();
+            var userPosts = _context.Posts
+                                    .Where(p => p.BlogUserId == user.Id)
+                                    .ToList();
+            if(userBlogs.Count > 0)
+            {
+                _context.Blogs.RemoveRange(userBlogs);
+            }
+            if(userComments != null)
+            {
+                _context.Comments.RemoveRange(userComments);
+                        
+            }
+            if(userTags.Count > 0)
+            {
+                _context.Tags.RemoveRange(userTags);
+            }
+            if(userPosts.Count > 0)
+            {
+                _context.Posts.RemoveRange(userPosts);
+            }
+
+            await _context.SaveChangesAsync();                            
 
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);

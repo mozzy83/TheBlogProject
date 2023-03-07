@@ -4,6 +4,7 @@ using System.Diagnostics;
 using TheBlogProject.Data;
 using TheBlogProject.Enums;
 using TheBlogProject.Models;
+using TheBlogProject.Services;
 
 namespace TheBlogProject.Services
 {
@@ -12,12 +13,16 @@ namespace TheBlogProject.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly IImageService _imageService;
+        private readonly IConfiguration _configuration;
 
-        public DataService(ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<BlogUser> userManager)
+        public DataService(ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<BlogUser> userManager, IImageService imageService, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _roleManager = roleManager;
             _userManager = userManager;
+            _imageService = imageService;
+            _configuration = configuration;
         }
 
 
@@ -52,6 +57,9 @@ namespace TheBlogProject.Services
             //If there are already users in the system, do nothing.
             if (_dbContext.Users.Any()) return;
 
+            var defaultUserImageData = await _imageService.EncodeImageAsync(_configuration["DefaultUserImage"]);
+            var defaultContentType = Path.GetExtension(_configuration["DefaultUserImage"]);
+
             //Step 1: Creates a new instance of BlogUser
             var adminUser = new BlogUser()
             {
@@ -61,6 +69,8 @@ namespace TheBlogProject.Services
                 LastName = "First",
                 DisplayName = "The Admin",
                 PhoneNumber = "(800) 555-1212",
+                ImageData = defaultUserImageData,
+                ContentType = defaultContentType,
                 EmailConfirmed = true
             };
 
@@ -80,6 +90,8 @@ namespace TheBlogProject.Services
                 LastName = "Second",
                 DisplayName = "Moderator User",
                 PhoneNumber = "(800) 555-1213",
+                ImageData = defaultUserImageData,
+                ContentType = defaultContentType,
                 EmailConfirmed = true
             };
             await _userManager.CreateAsync(modUser, "Abc&123!");
