@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -18,12 +19,14 @@ namespace TheBlogProject.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager)
+        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _imageService = imageService;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         // GET: Blogs
@@ -68,10 +71,18 @@ namespace TheBlogProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(blog.Image is null)
+                {
+                    blog.ImageData = await _imageService.EncodeImageAsync(_configuration["DefaultBlogImage"]);
+                    blog.ContentType = Path.GetExtension(_configuration["DefaultBlogImage"]);
+                }
+                else
+                {
+                    blog.ImageData = await _imageService.EncodeImageAsync(blog.Image);
+                    blog.ContentType = _imageService.ContentType(blog.Image);
+                }
                 blog.Created = DateTime.UtcNow;
                 blog.BlogUserId = _userManager.GetUserId(User);
-                blog.ImageData = await _imageService.EncodeImageAsync(blog.Image);
-                blog.ContentType = _imageService.ContentType(blog.Image);
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
 

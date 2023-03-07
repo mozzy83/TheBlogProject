@@ -12,6 +12,7 @@ using TheBlogProject.Services;
 using TheBlogProject.Enums;
 using TheBlogProject.ViewModels;
 using X.PagedList;
+using System.Reflection.Metadata;
 
 namespace TheBlogProject.Controllers
 {
@@ -22,14 +23,16 @@ namespace TheBlogProject.Controllers
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
         private readonly BlogSearchService _blogSearchService;
+        private readonly IConfiguration _configuration;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService, IConfiguration configuration)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
             _blogSearchService = blogSearchService;
+            _configuration = configuration;
         }
 
 
@@ -159,8 +162,17 @@ namespace TheBlogProject.Controllers
                 post.BlogUserId = authorId;
 
                 //Use _imageService to store the incoming user specified image
-                post.ImageData = await _imageService.EncodeImageAsync(post.Image);
-                post.ContentType = _imageService.ContentType(post.Image);
+                if(post.Image is null)
+                {
+                    post.ImageData = await _imageService.EncodeImageAsync(_configuration["DefaultPostImage"]);
+                    post.ContentType = Path.GetExtension(_configuration["DefaultPostImage"]);
+                }
+                else
+                {
+                    post.ImageData = await _imageService.EncodeImageAsync(post.Image);
+                    post.ContentType = _imageService.ContentType(post.Image);
+
+                }
 
 
 
