@@ -231,7 +231,6 @@ namespace TheBlogProject.Controllers
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home");
-
             }
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
