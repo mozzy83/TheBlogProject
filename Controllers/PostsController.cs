@@ -13,6 +13,7 @@ using TheBlogProject.Enums;
 using TheBlogProject.ViewModels;
 using X.PagedList;
 using System.Reflection.Metadata;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TheBlogProject.Controllers
 {
@@ -229,7 +230,8 @@ namespace TheBlogProject.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
+
             }
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
@@ -376,7 +378,7 @@ namespace TheBlogProject.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool PostExists(int id)

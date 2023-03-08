@@ -46,6 +46,13 @@
     <hr />
 </article>
 
+@if (User.IsInRole(BlogRole.Administrator.ToString()) || User.IsInRole(BlogRole.Moderator.ToString()))
+{
+    <div class="pb-2">
+        <a class="btn btn-sm rounded-pill btn-danger" asp-action="Delete" asp-route-slug="@Model.Post.Slug">Delete Post</a>
+    </div>
+}
+
 
 <div>
     @if (User.Identity.IsAuthenticated)
@@ -54,12 +61,12 @@
             @Html.Hidden("PostId", Model.Post.Id)
             @Html.Hidden("Slug", Model.Post.Slug)
 
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label class="h2 control-label font-weight-bold">Add Comment</label>
                 <textarea name="body" class="form-control" rows="10"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-dark btn-block btn-sm">Submit</button>
+            <button type="submit" class="btn btn-dark btn-block rounded-pill">Submit</button>
         </form>
     }
     else
@@ -73,7 +80,7 @@
     <hr class="card-hr" />
     <br />
 
-    <a id="commentSection" class="btn btn-sm btn-dark btn-block mb-2">@Model.Post.Comments.Count COMMENT(S)</a>
+    <a id="commentSection" class="btn btn-dark btn-block mb-2 rounded">@Model.Post.Comments.Count COMMENT(S)</a>
 
 
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
