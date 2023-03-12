@@ -73,8 +73,10 @@ namespace TheBlogProject.Controllers
                 comment.ModerationType = null;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
+                var commentPost = _context.Posts.Where(p => p.Id == comment.PostId).FirstOrDefault();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Details", "Posts", new { slug = comment.Post.Slug });
+                //return RedirectToAction("Details", "Posts", new { slug = comment.Post.Slug });
+                return RedirectToAction("Details", "Posts", new { slug = commentPost.Slug });
             }
 
             return View(comment);
