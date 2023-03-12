@@ -13,12 +13,12 @@
 
 @model IPagedList<Post>
 
-@*@{
+@{
     ViewData["Title"] = context.Blogs
                             .Where(b => b.Id == Model.First().BlogId)
                             .FirstOrDefault()
                             .Name;
-}*@
+}
 
 <div class="row d-flex justify-content-center">
     @foreach(var post in Model)
