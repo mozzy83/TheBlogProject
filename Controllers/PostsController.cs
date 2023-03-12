@@ -141,9 +141,12 @@ namespace TheBlogProject.Controllers
         //}
 
         // GET: Posts/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
+            var blog = _context.Blogs.Where(b => b.Id == id).FirstOrDefault();
+            ViewData["BlogId"] = id;
+            ViewData["BlogName"] = blog.Name.ToString();
+            //ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }

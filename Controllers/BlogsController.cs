@@ -190,14 +190,17 @@ namespace TheBlogProject.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Blogs'  is null.");
             }
+
             var blog = await _context.Blogs.FindAsync(id);
+
             if (blog != null)
             {
                 _context.Blogs.Remove(blog);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool BlogExists(int id)
