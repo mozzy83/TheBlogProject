@@ -244,15 +244,16 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(string slug)
+        public async Task<IActionResult> Edit(int id)
         {
             //if (id == null || _context.Posts == null)
-            if (slug == null)
-            {
-                return NotFound();
-            }
+            //if (slug == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Slug == slug);
+            //var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Slug == slug);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -327,6 +328,7 @@ namespace TheBlogProject.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+                    return RedirectToRoute("SlugRoute", new { slug = newPost.Slug });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -339,11 +341,13 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                //return RedirectToRoute("SlugRoute", new { slug = post.Slug });
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);
+            //return RedirectToRoute("SlugRoute", new { slug = post.Slug });
         }
 
         // GET: Posts/Delete/5
