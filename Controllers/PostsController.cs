@@ -60,6 +60,7 @@ namespace TheBlogProject.Controllers
         //BlogPostIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
+            
             if (id is null)
             {
                 return NotFound();
@@ -81,7 +82,6 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Details(string slug)
         {
-            ViewData["Title"] = "Post Details Page";
             if (string.IsNullOrEmpty(slug)) return NotFound();
 
             var post = await _context.Posts

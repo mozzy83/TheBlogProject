@@ -12,6 +12,11 @@
 
 @model IPagedList<Post>
 
+@{
+    ViewData["Title"] = "Search";
+}
+
+
 <div class="row">
     @foreach (var post in Model)
     {

@@ -11,6 +11,10 @@
 
 @model IPagedList<Blog>
 
+@{
+    ViewData["Title"] = "Home";
+}
+
 
 <div class="row d-flex justify-content-center">
 
@@ -95,21 +99,21 @@
 
 @section Scripts {
 
-<script>
-    var swalMsg = '@TempData["SweetAlert"]'
-    if (swalMsg != "") {
-        Swal.fire({
-            icon: 'success',
-            title: swalMsg,
-            timer: 2500
+    <script>
+        var swalMsg = '@TempData["SweetAlert"]'
+        if (swalMsg != "") {
+            Swal.fire({
+                icon: 'success',
+                title: swalMsg,
+                timer: 2500
 
-        })
-    }
+            })
+        }
 
 
-    $(document).ready(function () {
-        $("p").tooltip();
-    });
+        $(document).ready(function () {
+            $("p").tooltip();
+        });
 
-</script>
+    </script>
 }

@@ -9,7 +9,9 @@
 
 @model PostDetailViewModel
 
-
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
 
 <article>
     <div class="row">
