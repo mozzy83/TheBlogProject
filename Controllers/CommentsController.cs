@@ -65,6 +65,10 @@ namespace TheBlogProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PostId,Body")] Comment comment)
         {
+            if(comment.Body == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 //var commentList = await _context.Comments.Include(c => c.Post).FirstOrDefaultAsync(c => c.PostId == comment.PostId);
