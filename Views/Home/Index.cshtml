@@ -18,6 +18,13 @@
 
 <div class="row d-flex justify-content-center">
 
+    @if (TempData.ContainsKey("EmptyBlog"))
+    {
+        <div class="d-flex justify-content-center mb-4 fade_div">
+            <h3>@TempData["EmptyBlog"]</h3>
+        </div>
+    }
+
     @foreach (var blog in Model)
     {
         <div class="col-sm-12 col-md-6 col-lg-4 mt-2">

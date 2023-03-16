@@ -74,7 +74,11 @@ namespace TheBlogProject.Controllers
                 .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);
-
+            if(posts.Count == 0)
+            {
+                TempData["EmptyBlog"] = "Sorry, The Blog you selected contains no Posts.";
+                return RedirectToAction("Index", "Home");
+            }
             return View(posts);
         }
 
