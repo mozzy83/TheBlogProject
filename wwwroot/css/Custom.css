@@ -85,7 +85,14 @@ header.masthead .site-heading {
     }
 }
 
-
+.cfLink{
+    color: #ff993b;
+    font-weight: bold;
+}
+.m83Link {
+    color: #00d8b1;
+    font-weight:bold;
+}
 
 /*BUTTON STYLES*/
 .btn-tag {
