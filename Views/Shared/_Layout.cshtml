@@ -51,6 +51,9 @@
         </div>
     </nav>
     <!-- Page Header-->
+    @if(ViewData["HeaderImage"] is null){
+        ViewData["HeaderImage"] = Url.Content("~/images/LayoutBanner.jpg");
+    }
     <header class="masthead" style="background-image: url(@ViewData["HeaderImage"])">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">

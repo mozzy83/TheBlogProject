@@ -113,7 +113,7 @@ namespace TheBlogProject.Controllers
             }
             else
             {
-                ViewData["HeaderImage"] = Url.Content("~/img/PostsDefault.png");
+                ViewData["HeaderImage"] = Url.Content("~/images/PostsDefault.png");
 
             }
             ViewData["MainText"] = post.Title;
