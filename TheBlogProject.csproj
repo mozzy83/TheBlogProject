@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Comments\**" />
+    <Content Remove="Views\Comments\**" />
+    <EmbeddedResource Remove="Views\Comments\**" />
+    <None Remove="Views\Comments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\20230302030331_003.cs" />
     <Compile Remove="Data\Migrations\20230302030331_003.Designer.cs" />
   </ItemGroup>

@@ -29,13 +29,6 @@ namespace TheBlogProject.Controllers
             _configuration = configuration;
         }
 
-        // GET: Blogs
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
         // GET: Blogs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
