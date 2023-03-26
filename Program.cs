@@ -48,6 +48,11 @@ builder.Services.AddScoped<BlogSearchService>();
 
 var app = builder.Build();
 
+var scope = app.Services.CreateScope();
+
+//get the database update with the latest migrations
+await DataHelper.ManageDataAsync(scope.ServiceProvider);
+
 var dataService = app.Services
                      .CreateScope()
                      .ServiceProvider
