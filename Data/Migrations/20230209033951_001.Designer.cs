@@ -314,7 +314,7 @@ namespace TheBlogProject.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int?>("ModerationType")
+                    b.Property<int>("ModerationType")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModeratorId")
