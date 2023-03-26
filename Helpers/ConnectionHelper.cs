@@ -4,7 +4,7 @@ namespace TheBlogProject.Helpers
 {
     public static class ConnectionHelper
     {
-        public static string? GetConnectionString(IConfiguration configuration)
+        public static string GetConnectionString(IConfiguration configuration)
         {
             var connectionString = configuration.GetSection("ConnectionStrings")["DefaultConnection"];
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
