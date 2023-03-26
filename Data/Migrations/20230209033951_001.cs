@@ -236,7 +236,7 @@ namespace TheBlogProject.Data.Migrations
                     Moderated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ModeratedBody = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    ModerationType = table.Column<int>(type: "integer", nullable: false)
+                    ModerationType = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
