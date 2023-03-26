@@ -4,6 +4,9 @@ namespace TheBlogProject.Enums
 {
     public enum ModerationType
     {
+        [Description("No Moderation")]
+        None,
+
         [Description("Political propaganda")]
         Political,
 

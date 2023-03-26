@@ -45,7 +45,7 @@ namespace TheBlogProject.Controllers
             {
                 comment.BlogUserId = _userManager.GetUserId(User);
                 comment.Created = DateTime.UtcNow;
-                comment.ModerationType = null;
+                comment.ModerationType = 0;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 var commentPost = _context.Posts.Where(p => p.Id == comment.PostId).FirstOrDefault();
