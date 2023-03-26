@@ -58,7 +58,7 @@ await DataHelper.ManageDataAsync(scope.ServiceProvider);
 //                     .ServiceProvider
 //                     .GetRequiredService<DataService>();
 
-await dataService.ManageDataAsync();
+//await dataService.ManageDataAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
